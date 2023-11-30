@@ -8,7 +8,12 @@
  *       ADDITIONALLY, MAKE SURE THAT ALL LIBRARIES USED IN THIS FILE FILE ARE COMPATIBLE WITH PURE JAVASCRIPT
  * 
  */
-class LeagueService {    
+import axiosInstance from "./HttpRequest";
+class LeagueService { 
+    
+    constructor() {
+        this.matches = [];
+    }
     
     /**
      * Sets the match schedule.
@@ -36,14 +41,18 @@ class LeagueService {
      * 
      * @param {Array} matches List of matches.
      */    
-    setMatches(matches) {}
+    setMatches(matches) {
+        this.matches = matches;
+    }
 
     /**
      * Returns the full list of matches.
      * 
      * @returns {Array} List of matches.
      */
-    getMatches() {}
+    getMatches() {
+        return this.matches;
+    }
 
     /**
      * Returns the leaderboard in a form of a list of JSON objecs.
@@ -60,12 +69,84 @@ class LeagueService {
      * 
      * @returns {Array} List of teams representing the leaderboard.
      */
-    getLeaderboard() {}
+    getLeaderboard() {
+        const teamStats = {};
+
+        // Calculate team statistics based on matches
+        this.matches.forEach(match => {
+            const { homeTeam, awayTeam, homeTeamScore, awayTeamScore, matchPlayed } = match;
+
+            // Initialize team stats if not present
+            if (!teamStats[homeTeam]) {
+                teamStats[homeTeam] = { matchesPlayed: 0, goalsFor: 0, goalsAgainst: 0, points: 0 };
+            }
+            if (!teamStats[awayTeam]) {
+                teamStats[awayTeam] = { matchesPlayed: 0, goalsFor: 0, goalsAgainst: 0, points: 0 };
+            }
+
+            // Update match played count
+            teamStats[homeTeam].matchesPlayed++;
+            teamStats[awayTeam].matchesPlayed++;
+
+            // Update goals for and against
+            teamStats[homeTeam].goalsFor += homeTeamScore;
+            teamStats[homeTeam].goalsAgainst += awayTeamScore;
+            teamStats[awayTeam].goalsFor += awayTeamScore;
+            teamStats[awayTeam].goalsAgainst += homeTeamScore;
+
+            // Update points based on match result
+            if (matchPlayed) {
+                if (homeTeamScore > awayTeamScore) {
+                    teamStats[homeTeam].points += 3; // Home team won
+                } else if (homeTeamScore === awayTeamScore) {
+                    teamStats[homeTeam].points += 1;
+                    teamStats[awayTeam].points += 1; // Draw
+                } else {
+                    teamStats[awayTeam].points += 3; // Away team won
+                }
+            }
+        });
+
+        // Convert teamStats to an array for sorting
+        const leaderboard = Object.entries(teamStats).map(([teamName, stats]) => ({
+            teamName,
+            matchesPlayed: stats.matchesPlayed,
+            goalsFor: stats.goalsFor,
+            goalsAgainst: stats.goalsAgainst,
+            points: stats.points
+        }));
+
+        // Sort the leaderboard based on specified criteria
+        leaderboard.sort((a, b) => {
+            // Sort by Points
+            if (a.points !== b.points) return b.points - a.points;
+
+            // If points are equal, proceed to tiebreakers
+            const aGoalDiff = a.goalsFor - a.goalsAgainst;
+            const bGoalDiff = b.goalsFor - b.goalsAgainst;
+            if (aGoalDiff !== bGoalDiff) {
+                return bGoalDiff - aGoalDiff; // Goal Difference
+            }
+
+            if (a.goalsFor !== b.goalsFor) return b.goalsFor - a.goalsFor; // Goals Scored
+
+            // Alphabetical order by team name
+            return a.teamName.localeCompare(b.teamName);
+        });
+
+        return leaderboard;
+    }
     
     /**
      * Asynchronic function to fetch the data from the server.
      */
-    async fetchData() {}    
+    async fetchData() {
+        return axiosInstance
+                .get("v1/getAllMatches")
+                .then((data) => {
+                    const {success, matches} = data;
+                });
+    }    
 }
 
 export default LeagueService;
