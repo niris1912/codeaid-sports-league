@@ -141,11 +141,12 @@ class LeagueService {
      * Asynchronic function to fetch the data from the server.
      */
     async fetchData() {
-        return axiosInstance
-                .get("v1/getAllMatches")
-                .then((data) => {
-                    const {success, matches} = data;
-                });
+        
+        const response = await axiosInstance.get("v1/getAllMatches");
+        const {success, matches} = response.data;
+        if (success)
+            this.setMatches(matches);
+        
     }    
 }
 

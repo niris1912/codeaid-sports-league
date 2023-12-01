@@ -1,5 +1,251 @@
+:root {
+  /* Font sizes */
+  --menu-font-size: 16px;
+  --page-heading-font-size: 24px;
+  --table-header-font-size: 12px;
+  --non-bolded-cell-font-size: 14px;
+  --bolded-cell-font-size: 16px;
+
+  /* Font colors */
+  --menu-font-color: #FFFFFF;
+  --page-heading-font-color: #182C62;
+  --table-font-color: #4B5C68;
+  --footer-font-color: #4B5C68;
+  --page-header-bg-color: #025FEB;
+  --table-header-bg-color: #E4EDF2;
+  --even-row-bg-color: #F6F7F7;
+  --page-footer-bg-color: #F6F7F7;
+}
+
+/* Applying styles using CSS variables */
 body {
   margin: 0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  font-family: 'Open Sans', sans-serif;
+  font-size: var(--menu-font-size);
+  color: var(--page-heading-font-color);
+}
+
+.page-heading {
+  font-size: var(--page-heading-font-size);
+  color: var(--page-heading-font-color);
+}
+
+.page-header {
+  display: flex;
+  height: 60px;
+  padding: 0 40px;
+  background-color: var(--page-header-bg-color);
+  color: white;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo {
+  width: 110px;
+  height: auto;
+}
+
+ul.navbar {
+  display: flex;
+  list-style: none;  
+  padding-inline-start: 0;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 40px;
+  height: 25px;
+  color: white;
+  text-decoration: none;
+}
+
+.nav-icon {
+  height: 25px;
+  width: auto;
+}
+
+.nav-title {
+  font-family: sans-serif;
+  margin-left: 10px;
+}
+
+
+.page-footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  display: flex;
+  height: 40px;
+  align-items: center;
+  justify-content: flex-end;
+  background-color: var(--page-footer-bg-color);
+  color: var(--page-heading-font-color);
+}
+
+.page-content {
+  margin-top: 60px;
+}
+
+.page-title {
+  text-align: center;
+  font-family: sans-serif;
+  font-size: var(--page-heading-font-size);
+  margin-bottom: 20px;
+}
+
+.flag {
+  width: 53px;
+  height: 37px;
+}
+
+.img404 {
+  width: 70%;
+  height: auto;
+  margin: auto;
+}
+
+.schedule-page .even-row {
+  background-color: var(--even-row-bg-color);
+}
+
+.app-version {
+  font-weight: bold;
+  margin-right: 40px;
+}
+
+.container {
+  margin: 0 auto; 
+  box-sizing: border-box; 
+  /* background-color: #c2c2c2; */
+  margin-bottom: 40px;
+  padding-bottom: 20px;
+}
+
+.content {
+  width: 90%;
+  margin: 60px auto 0 auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+table thead tr {
+  height: 40px;
+  font-size: var(--table-header-font-size);
+  color: var(--table-font-color);
+  background-color: var(--table-header-bg-color);
+}
+
+table tbody tr:not(:last-child) {
+  border-bottom: 1px solid var(--table-header-bg-color); /* Apply bottom border to all tr except the last child */
+}
+
+table th, 
+table td {
+  padding: 0; 
+  border-spacing: 0; 
+  vertical-align: center;
+}
+
+table th {
+  font-family: sans-serif;
+  font-weight: bold;
+  padding-left: 20px;
+  text-align: left;
+  padding: 0 10px;
+}
+
+table td {
+  font-size: var(--non-bolded-cell-font-size);
+  color: var(--table-font-color);
+  vertical-align: middle;
+  height: 70px;
+  padding: 0 10px;
+}
+
+.text-left {
+  text-align: left; 
+}
+
+.text-right {
+  text-align: right; 
+}
+
+.text-center {
+  text-align: center; 
+}
+
+.country-item {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.country-item.cell-right .flag {
+  margin-left: 10px;
+}
+
+.country-item.cell-left .flag {
+  margin-right: 10px;
+}
+
+td.points {
+  font-size: var(--bolded-cell-font-size);
+  font-weight: bold;
+  color: var(--page-header-bg-color);
+}
+
+.bold {
+  font-size: var(--bolded-cell-font-size);
+  font-weight: bold;
+  color: var(--table-font-color);
+}
+
+.cell-left {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.cell-right {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.cell-center {
+  justify-content: center!important;
+}
+
+
+/* Media query for width 1000px and above */
+@media screen and (min-width: 1000px) {
+  .container {
+    max-width: 1000px; 
+  }
+}
+
+/* Media query for width between 750px and 999px */
+@media screen and (max-width: 999px) and (min-width: 750px) {
+  .container {
+    max-width: 750px; 
+  }
+
+  .md-none {
+    display: none;
+  }
+}
+
+/* Media query for width 700px and below */
+@media screen and (max-width: 500px) {
+  .container {
+    max-width: 700px; 
+  }
+  .sm-none {
+    display: none;
+  }
 }
